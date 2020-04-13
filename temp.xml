@@ -1,0 +1,48 @@
+<treenode text="PROGRAM">
+  <treenode text="LETCOMMAND">
+    <treenode text="SEQUENTIALDECLARATION">
+      <treenode text="INITVARDECLARATION">
+        <treenode text="IDENTIFIER">
+          <treenode text="x">
+          </treenode>
+        </treenode>
+        <treenode text="INTEGEREXPRESSION">
+          <treenode text="INTEGERLITERAL">
+            <treenode text="2">
+            </treenode>
+          </treenode>
+        </treenode>
+      </treenode>
+    </treenode>
+    <treenode text="CALLCOMMAND">
+      <treenode text="IDENTIFIER">
+        <treenode text="putint">
+        </treenode>
+      </treenode>
+      <treenode text="SINGLEACTUALPARAMETERSEQUENCE">
+        <treenode text="CONSTACTUALPARAMETER">
+          <treenode text="BINARYEXPRESSION">
+            <treenode text="VNAMEEXPRESSION">
+              <treenode text="SIMPLEVNAME">
+                <treenode text="IDENTIFIER">
+                  <treenode text="x">
+                  </treenode>
+                </treenode>
+              </treenode>
+            </treenode>
+            <treenode text="OPERATOR">
+              <treenode text="**">
+              </treenode>
+            </treenode>
+            <treenode text="INTEGEREXPRESSION">
+              <treenode text="INTEGERLITERAL">
+                <treenode text="3">
+                </treenode>
+              </treenode>
+            </treenode>
+          </treenode>
+        </treenode>
+      </treenode>
+    </treenode>
+  </treenode>
+</treenode>
