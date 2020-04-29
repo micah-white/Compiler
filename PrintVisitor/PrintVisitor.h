@@ -79,6 +79,8 @@ public:
   	Object* visitFuncFormalParameter(Object* obj, Object* o);
   	Object* visitProcFormalParameter(Object* obj, Object* o) ;
   	Object* visitVarFormalParameter(Object* obj, Object* o);
+	Object* visitResultFormalParameter(Object* obj, Object* o);
+	Object* visitValueResultFormalParameter(Object* obj, Object* o);
   	Object* visitEmptyFormalParameterSequence(Object* obj, Object* o);
   	Object* visitMultipleFormalParameterSequence(Object* obj, Object* o);
   	Object* visitSingleFormalParameterSequence(Object* obj, Object* o);
@@ -90,6 +92,8 @@ public:
   	Object* visitFuncActualParameter(Object* obj, Object* o);
   	Object* visitProcActualParameter(Object* obj, Object* o) ;
   	Object* visitVarActualParameter(Object* obj, Object* o);
+	Object* visitResultActualParameter(Object* obj, Object* o);
+	Object* visitValueResultActualParameter(Object* obj, Object* o);
   	Object* visitEmptyActualParameterSequence(Object* obj, Object* o);
   	Object* visitMultipleActualParameterSequence(Object* obj, Object* o);
   	Object* visitSingleActualParameterSequence(Object* obj, Object* o);
@@ -782,6 +786,36 @@ Object* PrintVisitor::visitVarFormalParameter(Object* obj, Object* o)
 	return NULL;
 }
 
+Object* PrintVisitor::visitResultFormalParameter(Object* obj, Object* o){
+	ResultFormalParameter* ast = (ResultFormalParameter*)obj;
+
+	PVInt* level = (PVInt*)o;
+	printHeader(level->value, "RESULTFORMALPARAMETER");
+	level->value++;
+	
+	ast->I->visit(this, level);
+    ast->T->visit(this, level);
+    
+	level->value--;
+    printFooter(level->value, "RESULTFORMALPARAMETER");
+	return NULL;
+}
+
+Object* PrintVisitor::visitValueResultFormalParameter(Object* obj, Object* o){
+	ValueResultFormalParameter* ast = (ValueResultFormalParameter*)obj;
+
+	PVInt* level = (PVInt*)o;
+	printHeader(level->value, "VALUERESULTFORMALPARAMETER");
+	level->value++;
+	
+	ast->I->visit(this, level);
+    ast->T->visit(this, level);
+    
+	level->value--;
+    printFooter(level->value, "VALUERESULTFORMALPARAMETER");
+	return NULL;
+}
+
 Object* PrintVisitor::visitEmptyFormalParameterSequence(Object* obj, Object* o) 
 {
 	EmptyFormalParameterSequence* ast = (EmptyFormalParameterSequence*)obj;
@@ -886,6 +920,36 @@ Object* PrintVisitor::visitVarActualParameter(Object* obj, Object* o)
 
 	level->value--;
     printFooter(level->value, "VARACTUALPARAMETER");
+	return NULL;
+}
+
+Object* PrintVisitor::visitResultActualParameter(Object* obj, Object* o) 
+{
+	ResultActualParameter* ast = (ResultActualParameter*)obj;
+
+	PVInt* level = (PVInt*)o;
+	printHeader(level->value, "RESULTACTUALPARAMETER");
+	level->value++;
+
+    ast->V->visit(this, level);
+
+	level->value--;
+    printFooter(level->value, "RESULTACTUALPARAMETER");
+	return NULL;
+}
+
+Object* PrintVisitor::visitValueResultActualParameter(Object* obj, Object* o) 
+{
+	ValueResultActualParameter* ast = (ValueResultActualParameter*)obj;
+
+	PVInt* level = (PVInt*)o;
+	printHeader(level->value, "VALUERESULTACTUALPARAMETER");
+	level->value++;
+
+    ast->V->visit(this, level);
+
+	level->value--;
+    printFooter(level->value, "VALUERESULTACTUALPARAMETER");
 	return NULL;
 }
 

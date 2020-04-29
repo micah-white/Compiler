@@ -94,6 +94,8 @@ Machine* mach;
   Object* visitFuncFormalParameter(Object* obj, Object* o);
   Object* visitProcFormalParameter(Object* obj, Object* o);
   Object* visitVarFormalParameter(Object* obj, Object* o);
+  Object* visitResultFormalParameter(Object* obj, Object* o);
+  Object* visitValueResultFormalParameter(Object* obj, Object* o);
   Object* visitEmptyFormalParameterSequence(Object* obj, Object* o);
   Object* visitMultipleFormalParameterSequence(Object* obj, Object* o);
   Object* visitSingleFormalParameterSequence(Object* obj, Object* o);
@@ -103,6 +105,8 @@ Machine* mach;
   Object* visitFuncActualParameter(Object* obj, Object* o);
   Object* visitProcActualParameter(Object* obj, Object* o);
   Object* visitVarActualParameter(Object* obj, Object* o);
+  Object* visitResultActualParameter(Object* obj, Object* o);
+  Object* visitValueResultActualParameter(Object* obj, Object* o);
   Object* visitEmptyActualParameterSequence(Object* obj, Object* o);
   Object* visitMultipleActualParameterSequence(Object* obj, Object* o);
   Object* visitSingleActualParameterSequence(Object* obj, Object* o);
@@ -666,7 +670,7 @@ Object* Encoder::visitSingleRecordAggregate(Object* obj,Object* o) {
 
 // Formal Parameters
 Object* Encoder::visitConstFormalParameter(Object* obj, Object* o) {
-	ConstFormalParameter* ast = (ConstFormalParameter*)obj;
+	  ConstFormalParameter* ast = (ConstFormalParameter*)obj;
     Frame* frame = (Frame*) o;
     int valSize = ((Integer*) ast->T->visit(this, NULL))->value;
     ast->entity = new UnknownValue (valSize, frame->level, -frame->size - valSize);
@@ -688,19 +692,40 @@ Object* Encoder::visitProcFormalParameter(Object* obj, Object* o) {
     Frame* frame = (Frame*) o;
 	int argsSize = mach->closureSize;
 	ast->entity = new UnknownRoutine (mach->closureSize, frame->level,-frame->size - argsSize);
-    writeTableDetails(ast);
-    return new Integer(argsSize);
+  writeTableDetails(ast);
+  return new Integer(argsSize);
   }
 
 Object* Encoder::visitVarFormalParameter(Object* obj, Object* o) {
 	VarFormalParameter* ast = (VarFormalParameter*)obj;
-    Frame* frame = (Frame*) o;
-    ast->T->visit(this, NULL);
+  Frame* frame = (Frame*) o;
+  ast->T->visit(this, NULL);
 	ast->entity = new UnknownAddress (mach->addressSize, frame->level,-frame->size - mach->addressSize);
-    writeTableDetails(ast);
+  writeTableDetails(ast);
 	return new Integer(mach->addressSize);
   }
 
+Object* Encoder::visitResultFormalParameter(Object* obj, Object* o){
+  ResultFormalParameter* ast = (ResultFormalParameter*)obj;
+  Frame* frame = (Frame*) o;
+
+  ast->T->visit(this, NULL);
+  ast->entity = new UnknownAddress (mach->addressSize, frame->level,-frame->size - mach->addressSize);
+  writeTableDetails(ast);
+	return new Integer(mach->addressSize);
+}
+
+Object* Encoder::visitValueResultFormalParameter(Object* obj, Object* o){
+  ValueResultFormalParameter* ast = (ValueResultFormalParameter*)obj;
+  Frame* frame = (Frame*) o;
+
+  ast->T->visit(this, NULL);
+  ast->entity = new UnknownAddress (mach->addressSize, frame->level,-frame->size - mach->addressSize);
+  writeTableDetails(ast);
+	return new Integer(mach->addressSize);
+  
+  return NULL;
+}
 
 Object* Encoder::visitEmptyFormalParameterSequence(Object* obj, Object* o) {
 	EmptyFormalParameterSequence* ast = (EmptyFormalParameterSequence*)obj;
@@ -725,11 +750,11 @@ Object* Encoder::visitSingleFormalParameterSequence(Object* obj, Object* o) {
 // Actual Parameters
 Object* Encoder::visitConstActualParameter(Object* obj, Object* o) {
 	ConstActualParameter* ast =(ConstActualParameter*)obj;
-    return ast->E->visit (this, o);
+  return ast->E->visit (this, o);
   }
 
 Object* Encoder::visitFuncActualParameter(Object* obj, Object* o) {
-	FuncActualParameter* ast = (FuncActualParameter*)obj;
+	  FuncActualParameter* ast = (FuncActualParameter*)obj;
     Frame* frame = (Frame*) o;
     if (ast->I->decl->entity->class_type() == "KNOWNROUTINE") {
       ObjectAddress* address = ((KnownRoutine*) ast->I->decl->entity)->address;
@@ -739,14 +764,13 @@ Object* Encoder::visitFuncActualParameter(Object* obj, Object* o) {
 		}
 	else if (ast->I->decl->entity->class_type() == "UNKNOWNROUTINE") {
       ObjectAddress* address = ((UnknownRoutine*) ast->I->decl->entity)->address;
-	  emit(mach->LOADop, mach->closureSize, displayRegister(frame->level,
-           address->level), address->displacement);
+	    emit(mach->LOADop, mach->closureSize, displayRegister(frame->level, address->level), address->displacement);
 		}
 	else if (ast->I->decl->entity->class_type() == "PRIMITIVEROUTINE") {
       int displacement = ((PrimitiveRoutine*) ast->I->decl->entity)->displacement;
       // static link, code address
-	  emit(mach->LOADAop, 0, mach->SBr, 0);
-	  emit(mach->LOADAop, 0, mach->PBr, displacement);
+	    emit(mach->LOADAop, 0, mach->SBr, 0);
+	    emit(mach->LOADAop, 0, mach->PBr, displacement);
     }
 	return new Integer(mach->closureSize);
   }
@@ -776,9 +800,23 @@ Object* Encoder::visitProcActualParameter(Object* obj, Object* o) {
 
 Object* Encoder::visitVarActualParameter(Object* obj, Object* o) {
 	VarActualParameter* ast = (VarActualParameter*)obj;
-    encodeFetchAddress(ast->V, (Frame*) o);
+  encodeFetchAddress(ast->V, (Frame*) o);
 	return new Integer(mach->addressSize);
   }
+
+Object* Encoder::visitResultActualParameter(Object* obj, Object* o){
+  
+  ResultActualParameter* ast = (ResultActualParameter*) obj;
+  Frame* frame = (Frame*) o;
+
+  
+  
+  return NULL;
+}
+
+Object* Encoder::visitValueResultActualParameter(Object* obj, Object* o){
+  return NULL;
+}
 
 
 Object* Encoder::visitEmptyActualParameterSequence(Object* obj, Object* o) {
@@ -1130,9 +1168,7 @@ void Encoder::saveObjectProgram(string objectName) {
 	
 	//objectStreadddm.open("something.txt");
 
-
-    int addr;
-
+  int addr;
    
 	addr = mach->CB;
 	for (addr = mach->CB; addr < nextInstrAddr; addr++)

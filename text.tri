@@ -1,7 +1,9 @@
 let
-	func ** (b: Integer, n: Integer) : Integer ~ if n = 0 then 1 else b * (b ** (n-1)) ;
-	var x := 2
+	func bull (b: Integer, out r: Integer) : Integer ~ b + b ;
+	var x: Integer;
+	var y: Integer
 in
-	putint(x ** 3)
-
-
+	begin
+		y := bull(3, out x);
+		putint(x)
+	end

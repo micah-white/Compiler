@@ -1,42 +1,114 @@
 <treenode text="PROGRAM">
   <treenode text="LETCOMMAND">
     <treenode text="SEQUENTIALDECLARATION">
-      <treenode text="INITVARDECLARATION">
-        <treenode text="IDENTIFIER">
-          <treenode text="x">
+      <treenode text="SEQUENTIALDECLARATION">
+        <treenode text="FUNCDECLARATION">
+          <treenode text="INTTYPEDENOTER">
           </treenode>
-        </treenode>
-        <treenode text="INTEGEREXPRESSION">
-          <treenode text="INTEGERLITERAL">
-            <treenode text="2">
+          <treenode text="MULTIPLEFORMALPARAMETERSEQUENCE">
+            <treenode text="CONSTFORMALPARAMETER">
+              <treenode text="INTTYPEDENOTER">
+              </treenode>
+            </treenode>
+            <treenode text="SINGLEFORMALPARAMETERSEQUENCE">
+              <treenode text="RESULTFORMALPARAMETER">
+                <treenode text="IDENTIFIER">
+                  <treenode text="r">
+                  </treenode>
+                </treenode>
+                <treenode text="INTTYPEDENOTER">
+                </treenode>
+              </treenode>
             </treenode>
           </treenode>
-        </treenode>
-      </treenode>
-    </treenode>
-    <treenode text="CALLCOMMAND">
-      <treenode text="IDENTIFIER">
-        <treenode text="putint">
-        </treenode>
-      </treenode>
-      <treenode text="SINGLEACTUALPARAMETERSEQUENCE">
-        <treenode text="CONSTACTUALPARAMETER">
           <treenode text="BINARYEXPRESSION">
             <treenode text="VNAMEEXPRESSION">
               <treenode text="SIMPLEVNAME">
                 <treenode text="IDENTIFIER">
-                  <treenode text="x">
+                  <treenode text="b">
                   </treenode>
                 </treenode>
               </treenode>
             </treenode>
             <treenode text="OPERATOR">
-              <treenode text="**">
+              <treenode text="+">
               </treenode>
             </treenode>
-            <treenode text="INTEGEREXPRESSION">
-              <treenode text="INTEGERLITERAL">
-                <treenode text="3">
+            <treenode text="VNAMEEXPRESSION">
+              <treenode text="SIMPLEVNAME">
+                <treenode text="IDENTIFIER">
+                  <treenode text="b">
+                  </treenode>
+                </treenode>
+              </treenode>
+            </treenode>
+          </treenode>
+        </treenode>
+        <treenode text="VARDECLARATION">
+          <treenode text="IDENTIFIER">
+            <treenode text="x">
+            </treenode>
+          </treenode>
+          <treenode text="INTTYPEDENOTER">
+          </treenode>
+        </treenode>
+      </treenode>
+      <treenode text="VARDECLARATION">
+        <treenode text="IDENTIFIER">
+          <treenode text="y">
+          </treenode>
+        </treenode>
+        <treenode text="INTTYPEDENOTER">
+        </treenode>
+      </treenode>
+    </treenode>
+    <treenode text="SEQUENTIALCOMMAND">
+      <treenode text="ASSIGNCOMMAND">
+        <treenode text="SIMPLEVNAME">
+          <treenode text="IDENTIFIER">
+            <treenode text="y">
+            </treenode>
+          </treenode>
+        </treenode>
+        <treenode text="CALLEXPRESSION">
+          <treenode text="IDENTIFIER">
+            <treenode text="bull">
+            </treenode>
+          </treenode>
+          <treenode text="MULTIPLEACTUALPARAMETERSEQUENCE">
+            <treenode text="CONSTACTUALPARAMETER">
+              <treenode text="INTEGEREXPRESSION">
+                <treenode text="INTEGERLITERAL">
+                  <treenode text="3">
+                  </treenode>
+                </treenode>
+              </treenode>
+            </treenode>
+            <treenode text="SINGLEACTUALPARAMETERSEQUENCE">
+              <treenode text="RESULTACTUALPARAMETER">
+                <treenode text="SIMPLEVNAME">
+                  <treenode text="IDENTIFIER">
+                    <treenode text="x">
+                    </treenode>
+                  </treenode>
+                </treenode>
+              </treenode>
+            </treenode>
+          </treenode>
+        </treenode>
+      </treenode>
+      <treenode text="CALLCOMMAND">
+        <treenode text="IDENTIFIER">
+          <treenode text="putint">
+          </treenode>
+        </treenode>
+        <treenode text="SINGLEACTUALPARAMETERSEQUENCE">
+          <treenode text="CONSTACTUALPARAMETER">
+            <treenode text="VNAMEEXPRESSION">
+              <treenode text="SIMPLEVNAME">
+                <treenode text="IDENTIFIER">
+                  <treenode text="x">
+                  </treenode>
                 </treenode>
               </treenode>
             </treenode>

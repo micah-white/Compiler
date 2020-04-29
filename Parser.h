@@ -184,7 +184,7 @@ CharacterLiteral* Parser::parseCharacterLiteral(){
 
 Identifier* Parser::parseIdentifier(){
     Identifier* I = NULL;
-
+  
 	if (currentToken->kind == Token::IDENTIFIER) {
       previousTokenPosition = currentToken->position;
       string spelling = currentToken->spelling;
@@ -192,7 +192,8 @@ Identifier* Parser::parseIdentifier(){
       currentToken = lexicalAnalyser->scan();
     } else {
       I = NULL;
-      syntacticError("identifier expected here", "");
+      cout << currentToken->kind << " " << currentToken->spelling << endl;
+      syntacticError("identifier expected here %",  "");
     }
     return I;
   }
@@ -787,63 +788,95 @@ FormalParameter* Parser::parseFormalParameter(){
     SourcePosition* formalPos = new SourcePosition();
     start(formalPos);
 
-    switch (currentToken->kind) {
+  switch (currentToken->kind) {
 
 	case Token::IDENTIFIER:
-      {
+    {
+      Identifier* iAST = parseIdentifier();
+      accept(Token::COLON);
+      TypeDenoter* tAST = parseTypeDenoter();
+      finish(formalPos);
+      formalAST = new ConstFormalParameter(iAST, tAST, formalPos);
+    }
+    break;
+
+  case Token::IN_IN:
+    {
+      acceptIt();
+      if(currentToken->kind == Token::OUT){
+        acceptIt();
         Identifier* iAST = parseIdentifier();
-		accept(Token::COLON);
+        accept(Token::COLON);
+        TypeDenoter* tAST = parseTypeDenoter();
+        finish(formalPos);
+        formalAST = new ValueResultFormalParameter(iAST, tAST, formalPos);
+      }
+      else{
+        Identifier* iAST = parseIdentifier();
+        accept(Token::COLON);
         TypeDenoter* tAST = parseTypeDenoter();
         finish(formalPos);
         formalAST = new ConstFormalParameter(iAST, tAST, formalPos);
       }
-      break;
+    }
+    break;
+
+  case Token::OUT:
+    {
+      acceptIt();
+      Identifier* iAST = parseIdentifier();
+      accept(Token::COLON);
+      TypeDenoter* tAST = parseTypeDenoter();
+      finish(formalPos);
+      formalAST = new ResultFormalParameter(iAST, tAST, formalPos);
+    }
+    break;
 
 	case Token::VAR:
-      {
-        acceptIt();
-        Identifier* iAST = parseIdentifier();
-		accept(Token::COLON);
-        TypeDenoter* tAST = parseTypeDenoter();
-        finish(formalPos);
-        formalAST = new VarFormalParameter(iAST, tAST, formalPos);
-      }
-      break;
+    {
+      acceptIt();
+      Identifier* iAST = parseIdentifier();
+      accept(Token::COLON);
+      TypeDenoter* tAST = parseTypeDenoter();
+      finish(formalPos);
+      formalAST = new VarFormalParameter(iAST, tAST, formalPos);
+    }
+    break;
 
 	case Token::PROC:
-      {
-        acceptIt();
-        Identifier* iAST = parseIdentifier();
-		accept(Token::LPAREN);
-        FormalParameterSequence* fpsAST = parseFormalParameterSequence();
-		accept(Token::RPAREN);
-        finish(formalPos);
-        formalAST = new ProcFormalParameter(iAST, fpsAST, formalPos);
-      }
-      break;
+    {
+      acceptIt();
+      Identifier* iAST = parseIdentifier();
+      accept(Token::LPAREN);
+      FormalParameterSequence* fpsAST = parseFormalParameterSequence();
+      accept(Token::RPAREN);
+      finish(formalPos);
+      formalAST = new ProcFormalParameter(iAST, fpsAST, formalPos);
+    }
+    break;
 
 	case Token::FUNC:
-      {
-        acceptIt();
-        Identifier* iAST = parseIdentifier();
-		accept(Token::LPAREN);
-        FormalParameterSequence* fpsAST = parseFormalParameterSequence();
-		accept(Token::RPAREN);
-		accept(Token::COLON);
-        TypeDenoter* tAST = parseTypeDenoter();
-        finish(formalPos);
-        formalAST = new FuncFormalParameter(iAST, fpsAST, tAST, formalPos);
-      }
-      break;
-
-    default:
-      syntacticError("\"%\" cannot start a formal parameter",
-        currentToken->spelling);
-      break;
-
+    {
+      acceptIt();
+      Identifier* iAST = parseIdentifier();
+      accept(Token::LPAREN);
+      FormalParameterSequence* fpsAST = parseFormalParameterSequence();
+      accept(Token::RPAREN);
+      accept(Token::COLON);
+      TypeDenoter* tAST = parseTypeDenoter();
+      finish(formalPos);
+      formalAST = new FuncFormalParameter(iAST, fpsAST, tAST, formalPos);
     }
-    return formalAST;
+    break;
+
+  default:
+    syntacticError("\"%\" cannot start a formal parameter",
+      currentToken->spelling);
+    break;
+
   }
+  return formalAST;
+}
 
 
 ActualParameterSequence* Parser::parseActualParameterSequence(){
@@ -856,9 +889,9 @@ ActualParameterSequence* Parser::parseActualParameterSequence(){
       finish(actualsPos);
       actualsAST = new EmptyActualParameterSequence(actualsPos);
 
-    } else {
-      actualsAST = parseProperActualParameterSequence();
-    }
+  } else {
+    actualsAST = parseProperActualParameterSequence();
+  }
     return actualsAST;
   }
 
@@ -870,26 +903,25 @@ ActualParameterSequence* Parser::parseProperActualParameterSequence(){
     start(actualsPos);
     ActualParameter* apAST = parseActualParameter();
 	if (currentToken->kind == Token::COMMA) {
-      acceptIt();
-      ActualParameterSequence* apsAST = parseProperActualParameterSequence();
-      finish(actualsPos);
-      actualsAST = new MultipleActualParameterSequence(apAST, apsAST,
-        actualsPos);
-    } else {
-      finish(actualsPos);
-      actualsAST = new SingleActualParameterSequence(apAST, actualsPos);
-    }
-    return actualsAST;
+    acceptIt();
+    ActualParameterSequence* apsAST = parseProperActualParameterSequence();
+    finish(actualsPos);
+    actualsAST = new MultipleActualParameterSequence(apAST, apsAST, actualsPos);
+  } else {
+    finish(actualsPos);
+    actualsAST = new SingleActualParameterSequence(apAST, actualsPos);
+  }
+  return actualsAST;
   }
 
 ActualParameter* Parser::parseActualParameter(){
-    ActualParameter* actualAST = NULL; // in case there's a syntactic error
+  ActualParameter* actualAST = NULL; // in case there's a syntactic error
 
-    SourcePosition* actualPos = new SourcePosition();
+  SourcePosition* actualPos = new SourcePosition();
 
-    start(actualPos);
+  start(actualPos);
 
-    switch (currentToken->kind) {
+  switch (currentToken->kind) {
 
 	case Token::IDENTIFIER:
 	case Token::INTLITERAL:
@@ -900,13 +932,36 @@ ActualParameter* Parser::parseActualParameter(){
 	case Token::LPAREN:
 	case Token::LBRACKET:
 	case Token::LCURLY:
+    {
+      Expression* eAST = parseExpression();
+      finish(actualPos);
+      actualAST = new ConstActualParameter(eAST, actualPos);
+    }
+    break;
+  case Token::IN_IN:
       {
-        Expression* eAST = parseExpression();
-        finish(actualPos);
-        actualAST = new ConstActualParameter(eAST, actualPos);
+        acceptIt();
+        if(currentToken->kind == Token::OUT){
+          acceptIt();
+          Vname* vAST = parseVname();
+          finish(actualPos);
+          actualAST = new ValueResultActualParameter(vAST, actualPos);
+        }
+        else {
+          Expression* eAST = parseExpression();
+          finish(actualPos);
+          actualAST = new ConstActualParameter(eAST, actualPos);
+        }
       }
       break;
-
+  case Token::OUT:
+      {
+        acceptIt();
+        Vname* vAST = parseVname();
+        finish(actualPos);
+        actualAST = new ResultActualParameter(vAST, actualPos);
+      }
+      break;
 	case Token::VAR:
       {
         acceptIt();
@@ -934,10 +989,9 @@ ActualParameter* Parser::parseActualParameter(){
       }
       break;
 
-    default:
-      syntacticError("\"%\" cannot start an actual parameter",
-        currentToken->spelling);
-      break;
+  default:
+    syntacticError("\"%\" cannot start an actual parameter", currentToken->spelling);
+    break;
 
     }
     return actualAST;

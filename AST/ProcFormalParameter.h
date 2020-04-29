@@ -18,7 +18,7 @@ public:
 		I = iAST;
 		FPS = fpsAST;
   	}
-  
+
 	Object* visit(Visitor* v, Object* o) {
 		return v->visitProcFormalParameter(this, o);
 	}

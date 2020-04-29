@@ -56,7 +56,9 @@ public:
 	virtual Object* visitFuncFormalParameter(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitProcFormalParameter(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitVarFormalParameter(Object* ast, Object* o){ return NULL; }
-	
+	virtual Object* visitResultFormalParameter(Object* ast, Object* o){return NULL;}
+	virtual Object* visitValueResultFormalParameter(Object* ast, Object* o){return NULL;}
+
 	virtual Object* visitEmptyFormalParameterSequence(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitMultipleFormalParameterSequence(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitSingleFormalParameterSequence(Object* ast, Object* o){ return NULL; }
@@ -66,7 +68,9 @@ public:
 	virtual Object* visitFuncActualParameter(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitProcActualParameter(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitVarActualParameter(Object* ast, Object* o){ return NULL; }
-	
+	virtual Object* visitResultActualParameter(Object* ast, Object* o){ return NULL; }
+	virtual Object* visitValueResultActualParameter(Object* ast, Object* o){ return NULL; }
+
 	virtual Object* visitEmptyActualParameterSequence(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitMultipleActualParameterSequence(Object* ast, Object* o){ return NULL; }
 	virtual Object* visitSingleActualParameterSequence(Object* ast, Object* o){ return NULL; }
