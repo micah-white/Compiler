@@ -142,7 +142,7 @@ Machine* mach;
 
   // Generates code to run a program.
   // showingTable is true iff entity description details
-  // are to be displayed.
+  // are to be displayed. 
 
   void encodeRun (Program* theAST, bool showingTable);
 

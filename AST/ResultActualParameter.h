@@ -15,7 +15,7 @@ Vname* V;
 	
 ResultActualParameter (Vname* vAST, SourcePosition* thePosition):ActualParameter(thePosition) {
     V = vAST;
-}
+} 
   
 Object* visit(Visitor* v, Object* o) {
 	return v->visitResultActualParameter(this, o);

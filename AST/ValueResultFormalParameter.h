@@ -41,6 +41,6 @@ public:
 		string temp = "VALUERESULTFORMALPARAMETER";
 		return temp;
 	}
-};
+}; 
 
 #endif

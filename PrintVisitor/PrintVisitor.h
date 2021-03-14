@@ -15,7 +15,7 @@ public:
 	FILE* stream;
 
 	// Commands
-  	// Always returns NULL. Does not use the given object.
+  	// Always returns NULL. Does not use the given object. 
 
   	Object* visitAssignCommand(Object* obj, Object* o);
   	Object* visitCallCommand(Object* obj, Object* o);

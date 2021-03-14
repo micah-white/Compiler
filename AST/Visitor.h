@@ -102,4 +102,4 @@ public:
 	// Programs
 	virtual Object* visitProgram(Object* ast, Object* o){ return NULL; }
 	Visitor() { int a = 5;}
-};
+}; 

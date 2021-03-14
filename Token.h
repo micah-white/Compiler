@@ -13,7 +13,6 @@ class Token{
 
 
 public:	int	firstReservedWord,lastReservedWord;
-//static const string tokenTable[35];
    int kind;
    string spelling;
    SourcePosition* position;

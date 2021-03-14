@@ -11,10 +11,10 @@ class Checker : public Visitor {
 public:
 
 
-   IdentificationTable* idTable;
-    SourcePosition* dummyPos;
-    StdEnvironment* getvariables;
-   ErrorReporter* reporter;
+  IdentificationTable* idTable;
+  SourcePosition* dummyPos;
+  StdEnvironment* getvariables;
+  ErrorReporter* reporter;
 // Commands
 
   // Always returns NULL. Does not use the given object.

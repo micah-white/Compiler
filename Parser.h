@@ -7,7 +7,6 @@
 #include "Token.h"
 #include "Scanner.h"
 #include "./AST/IntTypeDenoter.h"
-// #include "StdEnvironment.h"
 #include "ErrorReporter.h"
 #include "import_headers.h"
 

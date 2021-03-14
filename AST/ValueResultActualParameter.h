@@ -29,6 +29,6 @@ public:
 		string temp = "VALUERESULTACTUALPARAMETER";
 		return temp;
 	}
-};
+}; 
 
 #endif
